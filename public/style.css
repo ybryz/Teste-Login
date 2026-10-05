@@ -1,11 +1,11 @@
 :root {
-  --bg: #0f1115;
-  --card: #181b22;
-  --border: #2a2e38;
-  --text: #e6e8ec;
-  --muted: #9aa0ad;
-  --accent: #6c8cff;
-  --accent-hover: #5577ff;
+  --bg: #0a1628;
+  --card: #102340;
+  --border: #1f3a63;
+  --text: #e8f0fc;
+  --muted: #93a9c9;
+  --accent: #2f80ed;
+  --accent-hover: #1a6bd8;
   --error: #ff6b6b;
   --success: #4cd08a;
 }
@@ -55,7 +55,7 @@ input[type="password"] {
 
 input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(108, 140, 255, 0.25);
+  box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.3);
 }
 
 button,
