@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Logado</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="card center">
+    <div class="ok-icon">✓</div>
+    <h1>Você está logado</h1>
+    <p class="subtitle" id="ola"></p>
+
+    <button type="button" id="sair">Sair</button>
+  </main>
+
+  <script>
+    fetch('/api/me')
+      .then((res) => (res.ok ? res.json() : Promise.reject()))
+      .then((user) => { document.getElementById('ola').textContent = 'Olá, ' + user.nome + '!'; })
+      .catch(() => { window.location.href = '/'; });
+
+    document.getElementById('sair').addEventListener('click', async () => {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html>

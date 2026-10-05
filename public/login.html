@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Login</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>Bem-vindo</h1>
+    <p class="subtitle">Entre na sua conta para continuar</p>
+
+    <form id="form">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" placeholder="voce@exemplo.com" required autocomplete="email">
+
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" name="senha" placeholder="••••••••" required autocomplete="current-password">
+
+      <p id="msg" class="msg" role="alert"></p>
+      <button type="submit" id="btn">Entrar</button>
+    </form>
+
+    <div class="links">
+      <a href="/esqueci-senha">Esqueci minha senha</a>
+      <a href="/cadastro">Criar uma conta</a>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('form');
+    const msg = document.getElementById('msg');
+    const btn = document.getElementById('btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.textContent = '';
+      msg.className = 'msg';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: form.email.value,
+            senha: form.senha.value,
+          }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          window.location.href = '/logado';
+          return;
+        }
+        msg.textContent = data.erro || 'Não foi possível entrar.';
+        msg.className = 'msg error';
+      } catch {
+        msg.textContent = 'Erro de conexão com o servidor.';
+        msg.className = 'msg error';
+      }
+      btn.disabled = false;
+    });
+  </script>
+</body>
+</html>

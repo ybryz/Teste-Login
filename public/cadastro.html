@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>Criar conta</h1>
+    <p class="subtitle">Preencha os dados para se cadastrar</p>
+
+    <form id="form">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" placeholder="Seu nome" required autocomplete="name">
+
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" placeholder="voce@exemplo.com" required autocomplete="email">
+
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" name="senha" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password">
+
+      <label for="confirma">Confirmar senha</label>
+      <input type="password" id="confirma" name="confirma" placeholder="Repita a senha" required minlength="6" autocomplete="new-password">
+
+      <p id="msg" class="msg" role="alert"></p>
+      <button type="submit" id="btn">Cadastrar</button>
+    </form>
+
+    <div class="links">
+      <a href="/">Já tenho conta</a>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('form');
+    const msg = document.getElementById('msg');
+    const btn = document.getElementById('btn');
+
+    function mostrar(texto, tipo) {
+      msg.textContent = texto;
+      msg.className = 'msg ' + tipo;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      mostrar('', '');
+
+      if (form.senha.value !== form.confirma.value) {
+        return mostrar('As senhas não são iguais.', 'error');
+      }
+
+      btn.disabled = true;
+      try {
+        const res = await fetch('/api/cadastro', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nome: form.nome.value,
+            email: form.email.value,
+            senha: form.senha.value,
+          }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          mostrar('Cadastro realizado! Redirecionando para o login...', 'success');
+          setTimeout(() => { window.location.href = '/'; }, 1500);
+          return;
+        }
+        mostrar(data.erro || 'Não foi possível cadastrar.', 'error');
+      } catch {
+        mostrar('Erro de conexão com o servidor.', 'error');
+      }
+      btn.disabled = false;
+    });
+  </script>
+</body>
+</html>
